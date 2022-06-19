@@ -1,5 +1,5 @@
 # stock-analysis
-# Overview of Project
+# Overview of Project Green Stocks
 
 ## Purpose
 Our friend Steve recently graduated with a degree in finance and his parents want advice on which stocks to invest in.
@@ -31,14 +31,76 @@ Another good option may be RUN which only grew by 5.5% in 2017, but saw growth o
 We accomplished this analysis in three basic steps: 
 1. First we wrote a script to analyze a single stock. The bulk of this work was done by a `for` loop, which ran through every line of the data set and took information based on certain conditions.
 ```
-'loop over all the rows    For i = rowStart To rowEnd			
-	'check that we have the right stock        If Cells(i, 1).Value = "DQ" Then            'increase totalVolume by the value in the current row            totalVolume = totalVolume + Cells(i, 8).Value        End If	'check if first instance of stock        If Cells(i - 1, 1).Value <> "DQ" And Cells(i, 1).Value = "DQ" Then            startingPrice = Cells(i, 6).Value        End If	'check if last instance of stock        If Cells(i + 1, 1).Value <> "DQ" And Cells(i, 1).Value = "DQ" Then            endingPrice = Cells(i, 6).Value        End If    Next i
+'loop over all the rows
+    For i = rowStart To rowEnd
+			
+	'check that we have the right stock
+        If Cells(i, 1).Value = "DQ" Then
+
+            'increase totalVolume by the value in the current row
+            totalVolume = totalVolume + Cells(i, 8).Value
+
+        End If
+
+	'check if first instance of stock
+        If Cells(i - 1, 1).Value <> "DQ" And Cells(i, 1).Value = "DQ" Then
+
+            startingPrice = Cells(i, 6).Value
+
+        End If
+
+	'check if last instance of stock
+        If Cells(i + 1, 1).Value <> "DQ" And Cells(i, 1).Value = "DQ" Then
+
+            endingPrice = Cells(i, 6).Value
+
+        End If
+
+    Next i
 ```
 
 2. Next we generalized that script so that it analyzed all stocks. This was done by creating an array of all the stocks, and feeding each of those stocks through our initial `for` loop. We have our original `for` loop nested inside the loop of all stocks.
 
 ```
-' Loop through tickers   For i = 0 To 11       ticker = tickers(i)       totalVolume = 0              ' loop through rows in the data       Sheets(yearValue).Activate       For j = 2 To RowCount                  ' Get total volume for current ticker           If Cells(j, 1).Value = ticker Then               totalVolume = totalVolume + Cells(j, 8).Value           End If                      ' get starting price for current ticker           If Cells(j - 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then               startingPrice = Cells(j, 6).Value           End If           ' get ending price for current ticker           If Cells(j + 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then               endingPrice = Cells(j, 6).Value           End If                  Next j              ' Output data for current ticker       Worksheets("All Stocks Analysis").Activate       Cells(4 + i, 1).Value = ticker       Cells(4 + i, 2).Value = totalVolume       Cells(4 + i, 3).Value = endingPrice / startingPrice - 1   Next i
+' Loop through tickers
+   For i = 0 To 11
+       ticker = tickers(i)
+       totalVolume = 0
+       
+       ' loop through rows in the data
+       Sheets(yearValue).Activate
+       For j = 2 To RowCount
+       
+           ' Get total volume for current ticker
+           If Cells(j, 1).Value = ticker Then
+
+               totalVolume = totalVolume + Cells(j, 8).Value
+
+           End If
+           
+           ' get starting price for current ticker
+           If Cells(j - 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then
+
+               startingPrice = Cells(j, 6).Value
+
+           End If
+
+           ' get ending price for current ticker
+           If Cells(j + 1, 1).Value <> ticker And Cells(j, 1).Value = ticker Then
+
+               endingPrice = Cells(j, 6).Value
+
+           End If
+           
+       Next j
+       
+       ' Output data for current ticker
+       Worksheets("All Stocks Analysis").Activate
+       Cells(4 + i, 1).Value = ticker
+       Cells(4 + i, 2).Value = totalVolume
+       Cells(4 + i, 3).Value = endingPrice / startingPrice - 1
+
+   Next i
 ```
 
 
